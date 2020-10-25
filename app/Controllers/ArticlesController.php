@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 use App\Models\Article;
+use App\Database\DatabaseController;
 
 class ArticlesController
 {
-    private array $articles;
-
     public function index()
     {
-        $articlesQuery = query()
+        $articlesQuery = DatabaseController::query()
             ->select('*')
             ->from('articles')
             ->orderBy('created_at', 'desc')
@@ -19,8 +20,7 @@ class ArticlesController
 
         $articles = [];
 
-        foreach ($articlesQuery as $article)
-        {
+        foreach ($articlesQuery as $article) {
             $articles[] = new Article(
                 (int) $article['id'],
                 $article['title'],
@@ -34,7 +34,7 @@ class ArticlesController
 
     public function show(array $vars)
     {
-        $articleQuery = query()
+        $articleQuery = DatabaseController::query()
             ->select('*')
             ->from('articles')
             ->where('id = :id')

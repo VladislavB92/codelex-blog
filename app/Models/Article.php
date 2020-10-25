@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 class Article
@@ -14,8 +16,7 @@ class Article
         string $title,
         string $content,
         string $createdAt
-    )
-    {
+    ) {
         $this->id = $id;
         $this->title = $title;
         $this->content = $content;
