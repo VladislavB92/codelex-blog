@@ -3,30 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ziņas šodien</title>
+    <title>News Today</title>
 </head>
 
 <body>
-    <h1>Aktuālākās ziņas</h1>
+    <h1>Latest news</h1>
+    <div class="articles">
+        <?php foreach ($articles as $article) : ?>
+            <h3>
+                <a href="/articles/<?= $article->id(); ?>">
+                    <?= $article->title(); ?>
+                </a>
+            </h3>
+            <p><?= $article->content(); ?></p>
+            <p>
+                <small>
+                    <?= $article->createdAt(); ?>
+                </small>
+            </p>
 
-    <?php foreach ($articles as $article) : ?>
-        <h3>
-            <a href="/articles/<?= $article->id(); ?>">
-                <?= $article->title(); ?>
-            </a>
-        </h3>
-        <p><?= $article->content(); ?></p>
-        <p>
-            <small>
-                <?= $article->createdAt(); ?>
-            </small>
-        </p>
+            <form action="/articles/<?= $article->id(); ?>" method="POST">
+                <input type="hidden" name="_method" value="DELETE"/>
+                <button type='submit' onclick="return confirm('Are you sure?')">Delete</button>
+            </form>
+        <?php endforeach; ?>
 
-        <form action="/articles/<?= $article->id(); ?>" method="POST">
-            <button type='submit'>Delete</button>
-            <input type="hidden" name="_method" value="DELETE" />
+        <form action="/articles/create/" method="GET">
+            <input type="hidden" name="" />
+            <button type="submit">Create new article</button>
         </form>
-    <?php endforeach; ?>
+    </div>
 
 </body>
 

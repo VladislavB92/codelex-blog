@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <a href="/">Atpakaļ</a>
+    <a href="/">Back</a>
     <h1><?= $article->title(); ?></h1>
     <p><?= $article->content(); ?></p>
     <p>

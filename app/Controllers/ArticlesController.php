@@ -63,4 +63,9 @@ class ArticlesController
 
         header('Location: /');
     }
+
+    public function create()
+    {
+        return require_once __DIR__  . '/../Views/ArticleCreateView.php';
+    }
 }
