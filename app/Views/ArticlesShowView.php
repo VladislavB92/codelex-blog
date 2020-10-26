@@ -15,6 +15,15 @@
             <b><?= $article->createdAt(); ?></b>
         </small>
     </p>
+
+    <?= $comment->content(); ?>
+
+    <form action="/articles/<?= $comment->id(); ?>" method="POST">
+        <input type="text" name="name"><br>
+        <textarea name="comment" id="comment" cols="30" rows="10"></textarea><br>
+        <button type="submit">Comment</button>
+    </form>
+
 </body>
 
 </html>
