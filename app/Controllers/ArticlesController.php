@@ -64,8 +64,30 @@ class ArticlesController
         header('Location: /');
     }
 
-    public function create()
+    public function showCreate()
     {
         return require_once __DIR__  . '/../Views/ArticleCreateView.php';
+    }
+
+    public function create()
+    {
+        $title = $_POST['title'];
+        $content = $_POST['content'];
+
+        var_dump($title, $content);
+
+        $articleQuery = DatabaseController::query()
+            ->insert('articles')
+            ->values([
+                'title' => ':title',
+                'content' => ':content'
+            ])
+            ->setParameters([
+                'title' => $title,
+                'content' => $content
+            ])
+            ->execute();
+
+        header('Location: /');
     }
 }

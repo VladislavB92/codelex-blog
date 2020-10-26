@@ -14,7 +14,8 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute('GET', '/articles', $namespace . 'ArticlesController@index');
     $r->addRoute('GET', '/articles/{id}', $namespace . 'ArticlesController@show');
     $r->addRoute('DELETE', '/articles/{id}', $namespace . 'ArticlesController@delete');
-    $r->addRoute('GET', '/articles/create/', $namespace . 'ArticlesController@create');
+    $r->addRoute('GET', '/articles/create/', $namespace . 'ArticlesController@showCreate');
+    $r->addRoute('POST', '/articles', $namespace . 'ArticlesController@create');
 });
 
 // Fetch method and URI from somewhere
@@ -28,6 +29,7 @@ if (false !== $pos = strpos($uri, '?')) {
 $uri = rawurldecode($uri);
 
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
+
 switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
         echo '404 PAGE NOT FOUND';
@@ -41,6 +43,5 @@ switch ($routeInfo[0]) {
         $vars = $routeInfo[2];
 
         (new $controller)->$method($vars);
-
         break;
 }

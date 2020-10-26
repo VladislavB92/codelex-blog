@@ -7,6 +7,7 @@
 </head>
 
 <body>
+    <a href="/articles/create/">Create new article</a>
     <h1>Latest news</h1>
     <div class="articles">
         <?php foreach ($articles as $article) : ?>
@@ -23,16 +24,12 @@
             </p>
 
             <form action="/articles/<?= $article->id(); ?>" method="POST">
-                <input type="hidden" name="_method" value="DELETE"/>
+                <input type="hidden" name="_method" value="DELETE" />
                 <button type='submit' onclick="return confirm('Are you sure?')">Delete</button>
             </form>
         <?php endforeach; ?>
-
-        <form action="/articles/create/" method="GET">
-            <input type="hidden" name="" />
-            <button type="submit">Create new article</button>
-        </form>
     </div>
+
 
 </body>
 
