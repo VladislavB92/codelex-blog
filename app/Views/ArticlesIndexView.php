@@ -11,7 +11,7 @@
 
     <?php foreach ($articles as $article) : ?>
         <h3>
-            <a href="/articles/<?php echo $article->id(); ?>">
+            <a href="/articles/<?= $article->id(); ?>">
                 <?= $article->title(); ?>
             </a>
         </h3>
@@ -21,6 +21,11 @@
                 <?= $article->createdAt(); ?>
             </small>
         </p>
+
+        <form action="/articles/<?= $article->id(); ?>" method="POST">
+            <button type='submit'>Delete</button>
+            <input type="hidden" name="_method" value="DELETE" />
+        </form>
     <?php endforeach; ?>
 
 </body>
