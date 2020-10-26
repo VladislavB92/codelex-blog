@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 use App\Models\Article;
+use App\Database\DatabaseController;
 
 class ArticlesController
 {
-    private array $articles;
-
     public function index()
     {
-        $articlesQuery = query()
+        $articlesQuery = DatabaseController::query()
             ->select('*')
             ->from('articles')
             ->orderBy('created_at', 'desc')
@@ -19,8 +20,7 @@ class ArticlesController
 
         $articles = [];
 
-        foreach ($articlesQuery as $article)
-        {
+        foreach ($articlesQuery as $article) {
             $articles[] = new Article(
                 (int) $article['id'],
                 $article['title'],
@@ -34,7 +34,7 @@ class ArticlesController
 
     public function show(array $vars)
     {
-        $articleQuery = query()
+        $articleQuery = DatabaseController::query()
             ->select('*')
             ->from('articles')
             ->where('id = :id')
@@ -50,5 +50,44 @@ class ArticlesController
         );
 
         return require_once __DIR__  . '/../Views/ArticlesShowView.php';
+    }
+
+    public function delete(array $vars)
+    {
+        $articlesQuery = DatabaseController::query()
+            ->delete('articles')
+            ->from('articles')
+            ->where('id = :id')
+            ->setParameter('id', (int) $vars['id'])
+            ->execute();
+
+        header('Location: /');
+    }
+
+    public function showCreate()
+    {
+        return require_once __DIR__  . '/../Views/ArticleCreateView.php';
+    }
+
+    public function create()
+    {
+        $title = $_POST['title'];
+        $content = $_POST['content'];
+
+        var_dump($title, $content);
+
+        $articleQuery = DatabaseController::query()
+            ->insert('articles')
+            ->values([
+                'title' => ':title',
+                'content' => ':content'
+            ])
+            ->setParameters([
+                'title' => $title,
+                'content' => $content
+            ])
+            ->execute();
+
+        header('Location: /');
     }
 }

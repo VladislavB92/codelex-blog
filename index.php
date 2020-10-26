@@ -1,47 +1,25 @@
 <?php
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DriverManager;
-use Doctrine\DBAL\Query\QueryBuilder;
+declare(strict_types=1);
 
 require_once 'vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-// TODO Make this look better
-function database(): Connection
-{
-    $connectionParams = [
-        'dbname' => $_ENV['DB_DATABASE'],
-        'user' => $_ENV['DB_USER'],
-        'password' => $_ENV['DB_PASSWORD'],
-        'host' => $_ENV['DB_HOST'],
-        'driver' => 'pdo_mysql',
-    ];
-
-    $connection = DriverManager::getConnection($connectionParams);
-    $connection->connect();
-
-    return $connection;
-}
-
-function query(): QueryBuilder
-{
-    return database()->createQueryBuilder();
-}
-
-$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
+$dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     $namespace = '\App\Controllers\\';
 
     $r->addRoute('GET', '/', $namespace . 'ArticlesController@index');
-
     $r->addRoute('GET', '/articles', $namespace . 'ArticlesController@index');
     $r->addRoute('GET', '/articles/{id}', $namespace . 'ArticlesController@show');
+    $r->addRoute('DELETE', '/articles/{id}', $namespace . 'ArticlesController@delete');
+    $r->addRoute('GET', '/articles/create/', $namespace . 'ArticlesController@showCreate');
+    $r->addRoute('POST', '/articles', $namespace . 'ArticlesController@create');
 });
 
 // Fetch method and URI from somewhere
-$httpMethod = $_SERVER['REQUEST_METHOD'];
+$httpMethod = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
 
 // Strip query string (?foo=bar) and decode URI
@@ -51,6 +29,7 @@ if (false !== $pos = strpos($uri, '?')) {
 $uri = rawurldecode($uri);
 
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
+
 switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
         echo '404 PAGE NOT FOUND';
@@ -64,6 +43,5 @@ switch ($routeInfo[0]) {
         $vars = $routeInfo[2];
 
         (new $controller)->$method($vars);
-
         break;
 }
