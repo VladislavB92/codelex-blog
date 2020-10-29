@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 require_once 'vendor/autoload.php';
 
+if(isset($_POST['name'])) {
+    var_dump($_POST);
+}
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
@@ -16,6 +20,11 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute('DELETE', '/articles/{id}', $namespace . 'ArticlesController@delete');
     $r->addRoute('GET', '/articles/create/', $namespace . 'ArticlesController@showCreate');
     $r->addRoute('POST', '/articles', $namespace . 'ArticlesController@create');
+
+    $r->addRoute('GET', '/account', $namespace . 'AccountController@loadAccountView');
+    $r->addRoute('POST', '/account/create', $namespace . 'AccountController@createUser');
+
+    $r->addRoute('POST', '/account/login', $namespace . 'AccountController@login');
 });
 
 // Fetch method and URI from somewhere

@@ -54,7 +54,7 @@ class ArticlesController
 
     public function delete(array $vars)
     {
-        $articlesQuery = DatabaseController::query()
+        DatabaseController::query()
             ->delete('articles')
             ->from('articles')
             ->where('id = :id')
@@ -74,9 +74,7 @@ class ArticlesController
         $title = $_POST['title'];
         $content = $_POST['content'];
 
-        var_dump($title, $content);
-
-        $articleQuery = DatabaseController::query()
+        DatabaseController::query()
             ->insert('articles')
             ->values([
                 'title' => ':title',
