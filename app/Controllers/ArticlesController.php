@@ -74,8 +74,6 @@ class ArticlesController
         $title = $_POST['title'];
         $content = $_POST['content'];
 
-        var_dump($title, $content);
-
         $articleQuery = DatabaseController::query()
             ->insert('articles')
             ->values([
