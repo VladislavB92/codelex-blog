@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Models\Article;
+use App\Models\Comment;
 use App\Database\DatabaseController;
 
 class ArticlesController
@@ -42,6 +43,15 @@ class ArticlesController
             ->execute()
             ->fetchAssociative();
 
+        $commentQuery = DatabaseController::query()
+            ->select('*')
+            ->from('comments')
+            ->where('article_id = :article_id')
+            ->setParameter('article_id', (int) $vars['id'])
+            ->orderBy('created_at', 'desc')
+            ->execute()
+            ->fetchAllAssociative();
+
         $article = new Article(
             (int) $articleQuery['id'],
             $articleQuery['title'],
@@ -49,12 +59,24 @@ class ArticlesController
             $articleQuery['created_at'],
         );
 
+        $comments = [];
+
+        foreach ($commentQuery as $comment) {
+            $comments[] = new Comment(
+                (int) $comment['id'],
+                $comment['article_id'],
+                $comment['name'],
+                $comment['content'],
+                $comment['created_at']
+            );
+        }
+
         return require_once __DIR__  . '/../Views/ArticlesShowView.php';
     }
 
     public function delete(array $vars)
     {
-        $articlesQuery = DatabaseController::query()
+        DatabaseController::query()
             ->delete('articles')
             ->from('articles')
             ->where('id = :id')

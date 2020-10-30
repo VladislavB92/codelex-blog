@@ -26,22 +26,17 @@ class Comment
         $this->createdAt = $createdAt;
     }
 
-    public function id(): int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function article_id(): string
-    {
-        return $this->article_id;
-    }
-
-    public function name(): string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function content(): string
+    public function getContent(): string
     {
         return $this->content;
     }

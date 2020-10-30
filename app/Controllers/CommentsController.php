@@ -4,33 +4,43 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Models\Comment;
 use App\Database\DatabaseController;
 
 class CommentsController
 {
     public function comment(array $vars)
     {
+        $nickname = $_POST['nickname'];
+        $comment = $_POST['comment'];
+        $id = (int) $vars['id'];
+
+        DatabaseController::query()
+            ->insert('comments')
+            ->values([
+                'article_id' => $id,
+                'name' => ':nickname',
+                'content' => ':comment'
+            ])
+            ->setParameters([
+                'nickname' => $nickname,
+                'comment' => $comment
+            ])
+            ->execute();
+
+        header('Location: /articles/' . $id);
     }
 
-    public function showComment(array $vars)
+    public function delete(array $vars)
     {
-        $commentQuery = DatabaseController::query()
-            ->select('*')
-            ->from('comments')
+        $id = (int) $vars['id'];
+        $commentId = (int) $_POST['commentId'];
+
+        DatabaseController::query()
+            ->delete('comments')
             ->where('id = :id')
-            ->setParameter('id', (int) $vars['id'])
-            ->execute()
-            ->fetchAssociative();
+            ->setParameter('id', $commentId)
+            ->execute();
 
-        $comment = new Comment(
-            (int) $commentQuery['id'],
-            $commentQuery['article_id'],
-            $commentQuery['name'],
-            $commentQuery['content'],
-            $commentQuery['created_at']
-        );
-
-        return require_once __DIR__  . '/../Views/ArticlesShowView.php';
+        header('Location: /articles/' . $id);
     }
 }
