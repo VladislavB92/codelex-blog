@@ -16,6 +16,8 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute('DELETE', '/articles/{id}', $namespace . 'ArticlesController@delete');
     $r->addRoute('GET', '/articles/create/', $namespace . 'ArticlesController@showCreate');
     $r->addRoute('POST', '/articles', $namespace . 'ArticlesController@create');
+    $r->addRoute('POST', '/articles/{id}/comments', $namespace . 'CommentsController@comment');
+    $r->addRoute('DELETE', '/articles/{id}/comments/delete', $namespace . 'CommentsController@delete');
 });
 
 // Fetch method and URI from somewhere
