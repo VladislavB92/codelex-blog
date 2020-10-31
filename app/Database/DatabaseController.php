@@ -6,7 +6,6 @@ namespace App\Database;
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Connection;
-
 use Doctrine\DBAL\Query\QueryBuilder;
 
 class DatabaseController

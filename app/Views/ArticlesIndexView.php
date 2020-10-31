@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <a href="/account">Log in</a><br>
+    <a href="/account">Account</a><br>
     Loged in as: <br>
     <a href="/articles/create/">Create new article</a>
     <h1>Latest news</h1>
