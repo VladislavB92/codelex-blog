@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 require_once 'vendor/autoload.php';
 
+session_start();
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
@@ -13,11 +15,21 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute('GET', '/', $namespace . 'ArticlesController@index');
     $r->addRoute('GET', '/articles', $namespace . 'ArticlesController@index');
     $r->addRoute('GET', '/articles/{id}', $namespace . 'ArticlesController@show');
+
     $r->addRoute('DELETE', '/articles/{id}', $namespace . 'ArticlesController@delete');
+
     $r->addRoute('GET', '/articles/create/', $namespace . 'ArticlesController@showCreate');
     $r->addRoute('POST', '/articles', $namespace . 'ArticlesController@create');
+
     $r->addRoute('POST', '/articles/{id}/comments', $namespace . 'CommentsController@comment');
     $r->addRoute('DELETE', '/articles/{id}/comments/delete', $namespace . 'CommentsController@delete');
+
+    $r->addRoute('GET', '/register', $namespace . 'RegisterController@showRegistrationForm');
+    $r->addRoute('POST', '/register', $namespace . 'RegisterController@register');
+
+    $r->addRoute('GET', '/login', $namespace . 'LoginController@showLoginForm');
+    $r->addRoute('POST', '/login', $namespace . 'LoginController@login');
+    $r->addRoute('POST', '/logout', $namespace . 'LoginController@logout');
 });
 
 // Fetch method and URI from somewhere

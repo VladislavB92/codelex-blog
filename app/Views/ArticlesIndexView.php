@@ -7,6 +7,16 @@
 </head>
 
 <body>
+
+    <a href="/login">Login</a><br>
+    <a href="/register">Register</a><br>
+
+    <?php if (isset($_SESSION['auth_id'])) : ?>
+        <form method="post" action="/logout">
+            <button type="submit">Logout</button>
+        </form>
+    <?php endif; ?>
+
     <a href="/articles/create/">Create new article</a>
     <h1>Latest news</h1>
     <div class="articles">
