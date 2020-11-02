@@ -4,28 +4,19 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Database\DatabaseController;
+use App\Services\CommentServices\DeleteCommentService;
+use App\Services\CommentServices\PlaceCommentService;
 
 class CommentsController
 {
     public function comment(array $vars)
     {
+        $id = (int) $vars['id'];
         $nickname = $_POST['nickname'];
         $comment = $_POST['comment'];
-        $id = (int) $vars['id'];
 
-        DatabaseController::query()
-            ->insert('comments')
-            ->values([
-                'article_id' => $id,
-                'name' => ':nickname',
-                'content' => ':comment'
-            ])
-            ->setParameters([
-                'nickname' => $nickname,
-                'comment' => $comment
-            ])
-            ->execute();
+        $placeComment = new PlaceCommentService();
+        $placeComment->execute($id, $nickname, $comment);
 
         header('Location: /articles/' . $id);
     }
@@ -35,11 +26,8 @@ class CommentsController
         $id = (int) $vars['id'];
         $commentId = (int) $_POST['commentId'];
 
-        DatabaseController::query()
-            ->delete('comments')
-            ->where('id = :id')
-            ->setParameter('id', $commentId)
-            ->execute();
+        $deleteComment = new DeleteCommentService();
+        $deleteComment->execute($commentId);
 
         header('Location: /articles/' . $id);
     }
